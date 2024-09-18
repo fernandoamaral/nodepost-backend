@@ -75,4 +75,4 @@ Uma maneira simples de realizar o deploy é utilizando o serviço Render, que of
 5. Clique no botão para realizar o deploy.
 
 Após o deploy, você terá uma URL de acesso semelhante a esta:
-https://nodepost-ao67.onrender.com
+https://nodepost-ao67.onrender.com/posts

@@ -50,7 +50,7 @@ npm run start
 
 ## Documentação da API
 
-Uma vez que os containers estejam rodando, a documentação Swagger da API poderá ser acessada pela URL http://localhost:3000/docs, caso não tenha alterado a porta.
+A documentação Swagger da API poderá ser acessada pelo caminho `/docs`. Também disponibilizamos o acesso no link https://nodepost-ao67.onrender.com/docs/
 
 ## Testes
 
@@ -61,6 +61,18 @@ npm run test
 
 ## CD/CI
 
-Ao realizar o push na branch `main`, o GitHub actions executará os testes e, caso aprovados, enviará uma nova imagem para o Docker Hub.
+Ao realizar o push na branch `main`, o GitHub Actions executará os testes e, caso aprovados, enviará uma nova imagem para o Docker Hub.
 
-Para evitar que um commit realize o deploy, adicione o texto `[skip ci]` ao final da mensagem de commit.
+Para evitar que um commit realize o deploy, basta adicionar o texto `[skip ci]` ao final da mensagem de commit.
+
+## Deploy
+
+Uma maneira simples de realizar o deploy é utilizando o serviço Render, que oferece um plano gratuito. Seguem as intruções:
+1. Selecine a opção **Web Service**.
+2. No código de origem, escolha **Existing Image**.
+3. Digite a URL `fernandoamaral/nodepost`.
+4. Nas variáveis de ambiente, adicione a `MONGO_URI` com a string de conexão do MongoDB Atlas.
+5. Clique no botão para realizar o deploy.
+
+Após o deploy, você terá uma URL de acesso semelhante a esta:
+https://nodepost-ao67.onrender.com

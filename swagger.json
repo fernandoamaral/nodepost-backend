@@ -1,0 +1,193 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "NodePost",
+      "version": "1.0.0",
+      "description": "API Documentation for NodePost"
+    },
+    "paths": {
+      "/posts": {
+        "get": {
+          "summary": "Index",
+          "description": "Retrieve a list of posts.",
+          "operationId": "index",
+          "parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "size",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            }
+          }
+        },
+        "post": {
+          "summary": "Store",
+          "description": "Create a new post.",
+          "operationId": "store",
+          "requestBody": {
+            "description": "Post object that needs to be added.",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "type": "string",
+                      "example": "Title example"
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "Content example"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            }
+          }
+        }
+      },
+      "/posts/{postId}": {
+        "get": {
+          "summary": "Show",
+          "description": "Get a post by ID.",
+          "operationId": "show",
+          "parameters": [
+            {
+              "name": "postId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            }
+          }
+        },
+        "put": {
+          "summary": "Update",
+          "description": "Update a post by ID.",
+          "operationId": "update",
+          "parameters": [
+            {
+              "name": "postId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "Updated post object.",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "type": "string",
+                      "example": "Content example"
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "Title example"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Destroy",
+          "description": "Delete a post by ID.",
+          "operationId": "destroy",
+          "parameters": [
+            {
+              "name": "postId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            }
+          }
+        }
+      },
+      "/posts/search": {
+        "get": {
+          "summary": "Search",
+          "description": "Search for posts.",
+          "operationId": "search",
+          "parameters": [
+            {
+              "name": "q",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "size",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            }
+          }
+        }
+      }
+    }
+  }
+  

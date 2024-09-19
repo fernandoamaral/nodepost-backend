@@ -52,7 +52,7 @@ npm run start
 
 ## Documentação da API
 
-A documentação Swagger da API poderá ser acessada pelo caminho `/docs`. Também disponibilizamos o acesso no link https://nodepost-ao67.onrender.com/docs/
+A documentação Swagger da API poderá ser acessada pelo caminho `/docs`. Também disponibilizamos o acesso através do link https://nodepost-ao67.onrender.com/docs/ (pode levar um tempo para abrir, pois estamos utilizando o plano gratuito do Render).
 
 ## Testes
 
@@ -69,7 +69,7 @@ Para evitar que um commit realize o deploy, basta adicionar o texto `[skip ci]` 
 
 ## Deploy
 
-Uma maneira simples de realizar o deploy é utilizando o serviço Render, que oferece um plano gratuito. Seguem as intruções:
+Uma maneira simples de realizar o deploy é utilizando o serviço Render. Seguem as intruções:
 1. Selecine a opção **Web Service**.
 2. No código de origem, escolha **Existing Image**.
 3. Digite a URL `fernandoamaral/nodepost`.

@@ -61,7 +61,7 @@ A API possui testes automatizados com `Jest` e utiliza o banco de dados MongoDB 
 npm run test
 ```
 
-## CD/CI
+## CI/CD
 
 Ao realizar o push na branch `main`, o GitHub Actions executará os testes e, caso aprovados, enviará uma nova imagem para o Docker Hub.
 

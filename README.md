@@ -19,7 +19,7 @@ O Docker criará dois containers: um para a aplicação e outro para o banco de 
 git clone https://github.com/fernandoamaral/nodepost.git
 
 # crie o arquivo .env com as credenciais que deseja
-cp .env.example .env
+cd nodepost; cp .env.example .env
 
 # suba os containers
 docker compose up
@@ -27,10 +27,10 @@ docker compose up
 
 ### Instalação com Docker
 
-Opção para utilizar o MongoDB em outro servidor, como o serviço MongoDB Atlas.
+Opção para utilizar o MongoDB em outro servidor, como o serviço MongoDB Atlas. Lembre-se de alterar a string de conexão e liberar o IP no **Network Access** do Atlas.
 
 ```bash
-docker run -p 3000:3000 --env MONGO_URI="mongodb+srv://<db_username>:<db_password>@cluster0.jnmrp.mongodb.net/posts?retryWrites=true&w=majority&appName=Cluster0" fernandoamaral/nodepost
+docker run -p 3000:3000 --env MONGO_URI="string_de_conexao" fernandoamaral/nodepost
 ```
 
 ### Instalação sem Docker
@@ -41,10 +41,12 @@ Sem o Docker, você precisará instalar o MongoDB ou utilizar o serviço MongoDB
 # clone o repositório
 git clone https://github.com/fernandoamaral/nodepost.git
 
-# edite a string de conexão do MongoDB
-echo 'MONGO_URI="mongodb+srv://<db_username>:<db_password>@cluster0.jnmrp.mongodb.net/posts?retryWrites=true&w=majority&appName=Cluster0"' > .env
+# edite a string de conexão do MongoDB no arquivo .env
+cd nodepost
+echo 'MONGO_URI="string_de_conexao"' > .env
 
 # rode o projeto
+npm install
 npm run start
 ```
 

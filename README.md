@@ -1,12 +1,12 @@
-# NodePost
+# NodePost Backend
 
 **NodePost** é uma plataforma de blogging desenvolvida como parte de um projeto de pós-graduação. O objetivo é fornecer um espaço para que professores da rede pública possam compartilhar suas aulas e conhecimentos.
 
 ## Tecnologias
 
 - **Backend**: Node.js, Express, MongoDB
-- **Frontend**: a ser desenvolvido
 - **DevOps**: Docker, GitHub Actions
+- **Frontend**: [Nodepost Frontend](https://github.com/fernandoamaral/nodepost-frontend)
 
 ## Como Instalar
 
@@ -16,10 +16,10 @@ O Docker criará dois containers: um para a aplicação e outro para o banco de 
 
 ```bash
 # clone o repositório
-git clone https://github.com/fernandoamaral/nodepost.git
+git clone https://github.com/fernandoamaral/nodepost-backend.git
 
 # crie o arquivo .env com as credenciais que deseja
-cd nodepost; cp .env.example .env
+cd nodepost-backend; cp .env.example .env
 
 # suba os containers
 docker compose up
@@ -39,10 +39,10 @@ Sem o Docker, você precisará instalar o MongoDB ou utilizar o serviço MongoDB
 
 ```bash
 # clone o repositório
-git clone https://github.com/fernandoamaral/nodepost.git
+git clone https://github.com/fernandoamaral/nodepost-backend.git
 
 # edite a string de conexão do MongoDB no arquivo .env
-cd nodepost
+cd nodepost-backend
 echo 'MONGO_URI="string_de_conexao"' > .env
 
 # rode o projeto
@@ -52,7 +52,7 @@ npm run start
 
 ## Documentação da API
 
-A documentação Swagger da API poderá ser acessada pelo caminho `/docs`. Também disponibilizamos o acesso através do link https://nodepost-ao67.onrender.com/docs/ (pode levar um tempo para abrir, pois estamos utilizando o plano gratuito do Render).
+A documentação Swagger da API poderá ser acessada pelo caminho `/docs`. Também disponibilizamos o acesso através do link https://apinodepost.ddns.net/docs/.
 
 ## Testes
 
@@ -75,6 +75,3 @@ Uma maneira simples de realizar o deploy é utilizando o serviço Render. Seguem
 3. Digite a URL `fernandoamaral/nodepost`.
 4. Nas variáveis de ambiente, adicione a `MONGO_URI` com a string de conexão do MongoDB Atlas.
 5. Clique no botão para realizar o deploy.
-
-Após o deploy, você terá uma URL de acesso semelhante a esta:
-https://nodepost-ao67.onrender.com/posts

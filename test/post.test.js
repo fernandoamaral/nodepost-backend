@@ -8,13 +8,14 @@ import User from '../models/user.js'
 
 let mongo;
 let token;
+let user;
 
 beforeAll(async () => {
   mongo = await MongoMemoryServer.create()
   const uri = mongo.getUri()
   await mongoose.connect(uri)
 
-  const user = await User.create({ name: 'Test User', email: 'test@example.com', password: 'password123' });
+  user = await User.create({ name: 'Test User', email: 'test@example.com', password: 'password123' });
 
   token = jwt.sign(
     { email: user.email, userId: user._id.toString() },
@@ -33,7 +34,6 @@ afterAll(async () => {
 })
 
 async function createPost(title, content){
-  const user = await User.create({ name: 'Test', email: 'test@example.com', password: '123456' })
   const post = await Post.create({ title, content, author: user.id })
   return post
 }
@@ -49,8 +49,10 @@ describe('GET /posts', () => {
       .expect(200)
 
     expect(response.body.posts.length).toBe(2)
-    expect(response.body.posts[0].title).toBe(post1.title)
-    expect(response.body.posts[1].title).toBe(post2.title)
+
+    // on desc order
+    expect(response.body.posts[0].title).toBe(post2.title)
+    expect(response.body.posts[1].title).toBe(post1.title)
   })
 })
 

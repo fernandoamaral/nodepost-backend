@@ -42,7 +42,7 @@ class AuthController {
 
       const token = jwt.sign(
         { name: user.name, userId: user._id.toString() },
-        process.env.JWT_SECRET,
+        process.env.JWT_SECRET || 'batman',
         { expiresIn: '1d' }
       )
 

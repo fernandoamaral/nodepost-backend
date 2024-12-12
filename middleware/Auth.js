@@ -6,7 +6,7 @@ export default (req, res, next) => {
     return res.status(401).json({ message: 'Not authenticated.' })
   }
   const token = req.get('Authorization').split(' ')[1]
-  const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET || 'batman')
 
   if (!decodedToken) {
     return res.status(401).json({ message: 'Not authenticated.' })

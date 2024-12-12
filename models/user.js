@@ -2,27 +2,25 @@ import mongoose from 'mongoose'
 
 const Schema = mongoose.Schema
 
-const postSchema = new Schema({
-  title: {
+const userSchema = new Schema({
+  name: {
     type: String,
     required: true,
     trim: true
   },
-  content: {
+  email: {
     type: String,
     required: true,
     trim: true
   },
-  author: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+  password: {
+    type: String,
+    required: true,
+    min: 4
   }
 }, {
   timestamps: true,
   versionKey: false
 })
 
-postSchema.index({ author: 1 })
-
-export default mongoose.model('Post', postSchema)
+export default mongoose.model('User', userSchema)

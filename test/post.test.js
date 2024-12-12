@@ -1,15 +1,26 @@
 import supertest from 'supertest'
 import mongoose from 'mongoose'
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import jwt from 'jsonwebtoken'
 import app from '../server.js'
 import Post from '../models/post.js'
+import User from '../models/user.js'
 
 let mongo;
+let token;
 
 beforeAll(async () => {
   mongo = await MongoMemoryServer.create()
   const uri = mongo.getUri()
   await mongoose.connect(uri)
+
+  const user = await User.create({ name: 'Test User', email: 'test@example.com', password: 'password123' });
+
+  token = jwt.sign(
+    { email: user.email, userId: user._id.toString() },
+    process.env.JWT_SECRET,
+    { expiresIn: '1h' }
+  )
 })
 
 beforeEach(async () => {
@@ -21,16 +32,20 @@ afterAll(async () => {
   await mongo.stop()
 })
 
+async function createPost(title, content){
+  const user = await User.create({ name: 'Test', email: 'test@example.com', password: '123456' })
+  const post = await Post.create({ title, content, author: user.id })
+  return post
+}
+
 describe('GET /posts', () => {
   it('Should return all the posts', async () => {
-    const post1 = { title: 'Post 1', content: 'Content 1' }
-    const post2 = { title: 'Post 2', content: 'Content 2' }
-
-    await Post.create(post1)
-    await Post.create(post2)
+    const post1 = await createPost('Post 1', 'Content 1')
+    const post2 = await createPost('Post 2', 'Content 2')
 
     const response = await supertest(app)
       .get('/posts')
+      .set('Authorization', `Bearer ${token}`)
       .expect(200)
 
     expect(response.body.posts.length).toBe(2)
@@ -43,13 +58,15 @@ describe('GET /posts/:id', () => {
   it('Should return a 404 when the post doesn\'t exist', async () => {
     await supertest(app)
       .get('/posts/66c8db4b13a5ab5d7b8a3c9d')
+      .set('Authorization', `Bearer ${token}`)
       .expect(404)
   })
 
   it('Should return a post', async () => {
-    const post = await Post.create({ title: 'Post', content: 'Content' })
+    const post = await createPost('Post', 'Content')
     const response = await supertest(app)
       .get(`/posts/${post.id}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(200)
     
     expect(response.body.title).toBe('Post')
@@ -66,6 +83,7 @@ describe('POST /posts', () => {
 
     const response = await supertest(app)
       .post('/posts')
+      .set('Authorization', `Bearer ${token}`)
       .send(newPost)
       .expect(201)
 
@@ -73,43 +91,46 @@ describe('POST /posts', () => {
     expect(response.body.content).toBe(newPost.content)
   })
 
-  it('Should return a 400 when the body is invalid', async () => {
+  it('Should return a 422 when the body is invalid', async () => {
     const invalidPost = {
       content: 'Test Content'
     }
 
     await supertest(app)
       .post('/posts')
+      .set('Authorization', `Bearer ${token}`)
       .send(invalidPost)
-      .expect(400)
+      .expect(422)
   })
 })
 
 describe('PUT /posts/:id', () => {
-  it('Should return a 400 when the body is invalid', async () => {
-    const post = await Post.create({ title: 'Post', content: 'Content' })
+  it('Should return a 422 when the body is invalid', async () => {
+    const post = await createPost('Post', 'Content')
     await supertest(app)
       .put(`/posts/${post.id}`)
+      .set('Authorization', `Bearer ${token}`)
       .send({ invalid: 'invalid body' })
-      .expect(400)
+      .expect(422)
   })
 
   it('Should return a 404 when the post doesn\'t exist', async () => {
     await supertest(app)
       .put('/posts/66c8db4b13a5ab5d7b8a3c9d')
+      .set('Authorization', `Bearer ${token}`)
       .send({ title: 'Post', content: 'Content' })
       .expect(404)
   })
 
   it('Should return a 200 when the post is updated', async () => {
-    const post = await Post.create({ title: 'Post', content: 'Content' })
+    const post = await createPost('Post', 'Content')
     const response = await supertest(app)
       .put(`/posts/${post.id}`)
+      .set('Authorization', `Bearer ${token}`)
       .send({ title: 'Post updated', content: 'Content updated' })
       .expect(200)
-    
-    expect(response.body.title).toBe('Post updated')
-    expect(response.body.content).toBe('Content updated')
+
+    expect(response.body.message).toBe('Post updated.')
   })
 })
 
@@ -117,14 +138,16 @@ describe('DELETE /posts/:id', () => {
   it('Should return a 404 when the post doesn\'t exist', async () => {
     await supertest(app)
       .delete('/posts/66c8db4b13a5ab5d7b8a3c9d')
+      .set('Authorization', `Bearer ${token}`)
       .expect(404)
   })
 
   it('Shoud return a 200 when the post is deleted', async () => {
-    const post = await Post.create({ title: 'Post', content: 'Content' })
+    const post = await createPost('Post', 'Content')
     await supertest(app)
       .delete(`/posts/${post.id}`)
-      expect(200)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
     
     const storedPost = await Post.findById(post.id)
     expect(storedPost).toBe(null)
@@ -133,14 +156,12 @@ describe('DELETE /posts/:id', () => {
 
 describe('GET /posts/search', () => {
   it('Should search for posts by keyword', async () => {
-    const post1 = { title: 'First Post', content: 'Content of the first post' }
-    const post2 = { title: 'Second Post', content: 'Content of the second post' }
-
-    await Post.create(post1)
-    await Post.create(post2)
+    const post1 = await createPost('First Post', 'Content of the first post')
+    const post2 = await createPost('Second Post', 'Content of the second post')
 
     const response = await supertest(app)
       .get('/posts/search?q=first')
+      .set('Authorization', `Bearer ${token}`)
       .expect(200)
     
       expect(response.body.posts.length).toBe(1)

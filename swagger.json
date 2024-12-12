@@ -1,193 +1,266 @@
 {
-    "openapi": "3.0.0",
-    "info": {
-      "title": "NodePost",
-      "version": "1.0.0",
-      "description": "API Documentation for NodePost"
+  "openapi": "3.0.0",
+  "info": {
+    "title": "NodePost",
+    "version": "1.1.0",
+    "description": "API Documentation for NodePost"
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Insira o token JWT como 'Bearer <token>'"
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "summary": "Signup",
+        "description": "Register a new user.",
+        "operationId": "signup",
+        "requestBody": {
+          "description": "User registration object.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string", "format": "email" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully registered"
+          }
+        }
+      }
     },
-    "paths": {
-      "/posts": {
-        "get": {
-          "summary": "Index",
-          "description": "Retrieve a list of posts.",
-          "operationId": "index",
-          "parameters": [
-            {
-              "name": "page",
-              "in": "query",
-              "required": false,
+    "/auth/login": {
+      "post": {
+        "summary": "Login",
+        "description": "Authenticate a user and return a JWT.",
+        "operationId": "login",
+        "requestBody": {
+          "description": "User login object.",
+          "required": true,
+          "content": {
+            "application/json": {
               "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "size",
-              "in": "query",
-              "required": false,
-              "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Successful operation"
-            }
-          }
-        },
-        "post": {
-          "summary": "Store",
-          "description": "Create a new post.",
-          "operationId": "store",
-          "requestBody": {
-            "description": "Post object that needs to be added.",
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "content": {
-                      "type": "string",
-                      "example": "Title example"
-                    },
-                    "title": {
-                      "type": "string",
-                      "example": "Content example"
-                    }
-                  }
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string", "format": "email" },
+                  "password": { "type": "string" }
                 }
               }
             }
-          },
-          "responses": {
-            "200": {
-              "description": "Successful operation"
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully logged in"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "List Users",
+        "description": "Get a list of users.",
+        "operationId": "listUsers",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of users"
+          }
+        }
+      }
+    },
+    "/posts": {
+      "get": {
+        "summary": "List Posts",
+        "description": "Get a list of posts.",
+        "operationId": "listPosts",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
             }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of posts"
           }
         }
       },
-      "/posts/{postId}": {
-        "get": {
-          "summary": "Show",
-          "description": "Get a post by ID.",
-          "operationId": "show",
-          "parameters": [
-            {
-              "name": "postId",
-              "in": "path",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Successful operation"
-            }
+      "post": {
+        "summary": "Create Post",
+        "description": "Create a new post.",
+        "operationId": "createPost",
+        "security": [
+          {
+            "BearerAuth": []
           }
-        },
-        "put": {
-          "summary": "Update",
-          "description": "Update a post by ID.",
-          "operationId": "update",
-          "parameters": [
-            {
-              "name": "postId",
-              "in": "path",
-              "required": true,
+        ],
+        "requestBody": {
+          "description": "Post object that needs to be added.",
+          "required": true,
+          "content": {
+            "application/json": {
               "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "requestBody": {
-            "description": "Updated post object.",
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "content": {
-                      "type": "string",
-                      "example": "Content example"
-                    },
-                    "title": {
-                      "type": "string",
-                      "example": "Title example"
-                    }
-                  }
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "content": { "type": "string" }
                 }
               }
             }
-          },
-          "responses": {
-            "200": {
-              "description": "Successful operation"
-            }
           }
         },
-        "delete": {
-          "summary": "Destroy",
-          "description": "Delete a post by ID.",
-          "operationId": "destroy",
-          "parameters": [
-            {
-              "name": "postId",
-              "in": "path",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
+        "responses": {
+          "200": {
+            "description": "Post created"
+          }
+        }
+      }
+    },
+    "/posts/{postId}": {
+      "get": {
+        "summary": "Show Post",
+        "description": "Get a specific post by ID.",
+        "operationId": "showPost",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
-          ],
-          "responses": {
-            "200": {
-              "description": "Successful operation"
-            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post details"
           }
         }
       },
-      "/posts/search": {
-        "get": {
-          "summary": "Search",
-          "description": "Search for posts.",
-          "operationId": "search",
-          "parameters": [
-            {
-              "name": "q",
-              "in": "query",
-              "required": false,
+      "put": {
+        "summary": "Update Post",
+        "description": "Update a post by ID.",
+        "operationId": "updatePost",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated post object.",
+          "required": true,
+          "content": {
+            "application/json": {
               "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "page",
-              "in": "query",
-              "required": false,
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "size",
-              "in": "query",
-              "required": false,
-              "schema": {
-                "type": "string"
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "content": { "type": "string" }
+                }
               }
             }
-          ],
-          "responses": {
-            "200": {
-              "description": "Successful operation"
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Post updated"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Post",
+        "description": "Delete a post by ID.",
+        "operationId": "deletePost",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post deleted"
+          }
+        }
+      }
+    },
+    "/posts/search": {
+      "get": {
+        "summary": "Search Posts",
+        "description": "Search for posts.",
+        "operationId": "searchPosts",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results"
           }
         }
       }
     }
   }
-  
+}

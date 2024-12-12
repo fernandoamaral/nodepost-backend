@@ -19,7 +19,7 @@ beforeAll(async () => {
 
   token = jwt.sign(
     { email: user.email, userId: user._id.toString() },
-    process.env.JWT_SECRET,
+    'batman',
     { expiresIn: '1h' }
   )
 })
